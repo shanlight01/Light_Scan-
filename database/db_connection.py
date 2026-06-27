@@ -2,14 +2,12 @@ import mysql.connector
 from mysql.connector import Error
 
 # Configuration de la connexion MySQL
-# Pensez à modifier ces informations selon votre base de données locale ou distante
-DB_CONFIG = {
-    'host': '192.3.5.7',
-    'port': 3306,
-    'user': 'root',
-    'password': '123password123!',
-    'database': 'light_scan_Mysql_DB'
-}
+# Pensez à modifier ces informations dans database/config.py
+try:
+    from database.config import DB_CONFIG
+except ImportError:
+    print("Erreur: Le fichier database/config.py est introuvable.")
+    DB_CONFIG = {}
 
 def get_connection():
     """
