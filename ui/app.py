@@ -6,13 +6,19 @@ from ui.tab_os import TabOS
 from ui.tab_services import TabServices
 from ui.tab_export import TabExport
 from ui.tab_dashboard import TabDashboard
+from ui.tab_history import TabHistory
 
 class App(tk.Tk):
+    # Constructeur de la classe App, appelé lors de l'instanciation
     def __init__(self):
         super().__init__()
+        # Titre de la fenêtre principale
         self.title("LIGHT_SCAN - Audit Réseau")
+        # Dimensions de la fenêtre (largeur x hauteur)
         self.geometry("1000x700")
+        # Couleur de fond principale
         self.configure(bg=BG_MAIN)
+
         
         # Données partagées en mémoire (pas de BDD externe)
         # Ces données seront alimentées par les différents onglets de scan
@@ -46,9 +52,11 @@ class App(tk.Tk):
         self.tab_services = TabServices(self.notebook, self.scan_data)
         self.tab_export = TabExport(self.notebook, self.scan_data)
         self.tab_dashboard = TabDashboard(self.notebook, self.scan_data)
+        self.tab_history = TabHistory(self.notebook)
         
         self.notebook.add(self.tab_hosts, text="📍 Inventaire (Hosts)")
         self.notebook.add(self.tab_os, text="💻 OS Fingerprint")
         self.notebook.add(self.tab_services, text="🔍 Services & Vulns")
+        self.notebook.add(self.tab_history, text="🗄️ Historique MySQL")
         self.notebook.add(self.tab_export, text="💾 Rapport & Export")
         self.notebook.add(self.tab_dashboard, text="📊 Tableau de Bord")

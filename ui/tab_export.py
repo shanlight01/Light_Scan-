@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from ui.theme import *
-from core.exporter import export_json, export_csv
+from core.exporter import export_json, export_csv, export_html
 
 class TabExport(tk.Frame):
     def __init__(self, parent, scan_data):
@@ -21,6 +21,9 @@ class TabExport(tk.Frame):
 
         btn_csv = tk.Button(frame_btns, text="Exporter en CSV", font=FONT_BODY, bg=GREEN, fg="white", width=20, command=self._export_csv)
         btn_csv.pack(side="left", padx=PAD_M)
+
+        btn_html = tk.Button(frame_btns, text="Rapport HTML (Nouveau)", font=FONT_BODY, bg="#2980b9", fg="white", width=20, command=self._export_html)
+        btn_html.pack(side="left", padx=PAD_M)
         
         self.lbl_info = tk.Label(self, text="", font=FONT_BODY, bg=BG_MAIN, fg=TEXT_PRIMARY)
         self.lbl_info.pack(pady=PAD_M)
@@ -40,5 +43,14 @@ class TabExport(tk.Frame):
             try:
                 filepath = export_csv(self.scan_data, directory)
                 self.lbl_info.config(text=f"Export CSV réussi :\n{filepath}", fg=GREEN)
+            except Exception as e:
+                messagebox.showerror("Erreur d'export", str(e))
+
+    def _export_html(self):
+        directory = filedialog.askdirectory(title="Choisir le dossier de destination")
+        if directory:
+            try:
+                filepath = export_html(self.scan_data, directory)
+                self.lbl_info.config(text=f"Rapport HTML généré avec succès :\n{filepath}", fg="#2980b9")
             except Exception as e:
                 messagebox.showerror("Erreur d'export", str(e))

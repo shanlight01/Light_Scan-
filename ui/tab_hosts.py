@@ -3,6 +3,7 @@ from tkinter import ttk
 import threading
 from ui.theme import *
 from core.scanner import NetworkScanner
+from database.models import insert_scan
 
 class TabHosts(tk.Frame):
     def __init__(self, parent, scan_data):
@@ -58,6 +59,11 @@ class TabHosts(tk.Frame):
         
         # Mise à jour des données globales
         self.scan_data["hosts"] = results
+        
+        # Sauvegarde de l'historique du scan dans MySQL
+        target_ip = self.entry_target.get().strip()
+        status_msg = f"Terminé ({len(results)} hôtes trouvés)"
+        insert_scan(target=target_ip, status=status_msg)
         
         for h in results:
             self.tree.insert("", "end", values=(h['ip'], h['hostname'], h['mac'], h['state']))

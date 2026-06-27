@@ -3,6 +3,7 @@ from tkinter import ttk
 import threading
 from ui.theme import *
 from core.scanner import NetworkScanner
+from database.models import insert_scan
 
 class TabServices(tk.Frame):
     def __init__(self, parent, scan_data):
@@ -78,6 +79,11 @@ class TabServices(tk.Frame):
         
         # Maj des données partagées
         self.scan_data["services"] = results
+        
+        # Sauvegarde en base de données
+        target_ip = self.entry_target.get().strip()
+        num_ports = len(results.get('ports', []))
+        insert_scan(target=target_ip, status=f"Services audités ({num_ports} ports ouverts)")
         
         for p in results.get("ports", []):
             version_str = f"{p['product']} {p['version']}".strip()

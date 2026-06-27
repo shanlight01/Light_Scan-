@@ -3,6 +3,7 @@ from tkinter import ttk
 import threading
 from ui.theme import *
 from core.scanner import NetworkScanner
+from database.models import insert_scan
 
 class TabOS(tk.Frame):
     def __init__(self, parent, scan_data):
@@ -56,6 +57,10 @@ class TabOS(tk.Frame):
         
         # Ajout aux données globales
         self.scan_data["os_results"].extend(results)
+        
+        # Sauvegarde en base de données
+        target_ip = self.entry_target.get().strip()
+        insert_scan(target=target_ip, status=f"OS Scan terminé ({len(results)} résultats)")
         
         for r in results:
             self.tree.insert("", "end", values=(r['ip'], r['os'], r['accuracy'], r['cpe']))
